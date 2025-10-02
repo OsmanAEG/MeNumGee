@@ -21,6 +21,8 @@
 ////////////////////////////////////////////////////////////////////////////
 #include <iostream>
 #include <stdexcept>
+#include <utility>
+#include <vector>
 
 namespace menumgee {
 ////////////////////////////////////////////////////////////////////////////
@@ -62,20 +64,68 @@ public:
                     const Scalar_type& num_cells_x_in,
                     const Scalar_type& y_min_in,
                     const Scalar_type& y_max_in,
-                    const Scalar_type& num_cells_y_in) :
+                    const Scalar_type& num_cells_y_in,
+                    const Scalar_type& num_quadrature_points_per_face_in,
+                    const Scalar_type& num_quadrature_points_per_volume_in) :
     x_min(x_min_in),
     x_max(x_max_in),
     num_cells_x(num_cells_x_in),
     y_min(y_min_in),
     y_max(y_max_in),
-    num_cells_y(num_cells_y_in) {
+    num_cells_y(num_cells_y_in),
+    num_quadrature_points_per_face(num_quadrature_points_per_face_in),
+    num_quadrature_points_per_volume(num_quadrature_points_per_volume_in) {
       if(num_cells_x == 0 || num_cells_y == 0) {
         throw std::runtime_error("The number of cells in each direction must be greater than 0!");
+      }
+
+      if(num_quadrature_points_per_face < 0 || num_quadrature_points_per_face > 3) {
+        throw std::runtime_error("Unsupported number of face quadrature points!");
+      }
+
+      if(num_quadrature_points_per_volume < 0 || num_quadrature_points_per_volume > 3) {
+        throw std::runtime_error("Unsupported number of volume quadrature points!");
       }
 
       dx = (x_max - x_min)/num_cells_x;
       dy = (y_max - y_min)/num_cells_y;
     }
+
+  /////////////////////////////////////////////////////////////////////////
+  /// \brief Returns the number of cells in the grid
+  size_t num_cells() {
+    return num_cells_x*num_cells_y;
+  }
+
+  /////////////////////////////////////////////////////////////////////////
+  /// \brief Returns the cell centroid in the grid based on the input
+  ///        of a two dimensional index.
+  std::pair<Scalar_T, Scalar_T> cell_centroid(const size_t i, const size_t j) {
+    if(i < 0 || i >= num_cells_x || j < 0 || j >= num_cells_y) {
+      throw std::runtime_error("The cell index is out of range");
+    }
+
+    const Scalar_T x_centroid = x_min + (static_cast<Scalar_T>(i) + 0.5)*dx;
+    const Scalar_T y_centroid = y_min + (static_cast<Scalar_T>(j) + 0.5)*dy;
+
+    return {x_centroid, y_centroid};
+  }
+
+  /////////////////////////////////////////////////////////////////////////
+  /// \brief Returns a vector of cell quadrature points along each face
+  std::vector<std::pair<Scalar_T, Scalar_T>> face_quadrature_points(const size_t i, const size_t j) {
+    if(num_quadrature_points_per_face == 0) {
+      return {};
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////////////
+  /// \brief Returns a vector of quadrature points in each cell volume
+  std::vector<std::pair<Scalar_T, Scalar_T>> volume_quadrature_points(const size_t i, const size_t j) {
+    if(num_quadrature_points_per_volume == 0) {
+      return {};
+    }
+  }
 
 protected:
   //////////////////////////////////////////////////////////////////////////
@@ -88,7 +138,7 @@ protected:
 
   //////////////////////////////////////////////////////////////////////////
   /// \brief The number of cells in the x-direction.
-  Scalar_T num_cells_x;
+  size_t num_cells_x;
 
   //////////////////////////////////////////////////////////////////////////
   /// \brief The length of a cell face in the x-direction.
@@ -104,11 +154,19 @@ protected:
 
   //////////////////////////////////////////////////////////////////////////
   /// \brief The number of cells in the y-direction.
-  Scalar_T num_cells_y;
+  size_t num_cells_y;
 
   //////////////////////////////////////////////////////////////////////////
   /// \brief The length of a cell face in the y-direction.
   Scalar_T dy;
+
+  //////////////////////////////////////////////////////////////////////////
+  /// \brief The number of quadrature points on a cell face.
+  size_t num_quadrature_points_per_face;
+
+  //////////////////////////////////////////////////////////////////////////
+  /// \brief The number of quadrature points in a cell volume.
+  size_t num_quadrature_points_per_volume;
 }; // class Cartesian_Mesh_2D
 
 // @}

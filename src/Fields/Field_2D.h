@@ -1,0 +1,38 @@
+#ifndef FIELD_2D_H
+#define FIELD_2D_H
+
+////////////////////////////////////////////////////////////////////////////
+// This file is part of the MeNumGee software for numerical development
+// in Python. It is licensed under the MIT License. A copy of this
+// license, in a file named LICENSE.md, should have been distributed
+// with this file. A copy of this license is also currently available
+// at "https://opensource.org/licenses/MIT".
+
+// Unless explicitly stated, all contributions intentionally submitted
+// to this project shall also be under the terms and conditions of this
+// license, without any additional terms or conditions.
+////////////////////////////////////////////////////////////////////////////
+/// \file
+/// \brief Header containing the class a 2D Field.
+////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////
+// local
+////////////////////////////////////////////////////////////////////////////
+#include <iostream>
+#include <stdexcept>
+#include <utility>
+
+namespace menumgee {
+////////////////////////////////////////////////////////////////////////////
+/// \defgroup Fields Fields
+/// \brief    A collection of fields.
+/// @{
+////////////////////////////////////////////////////////////////////////////
+/// \brief Outputs a 2D Field.
+
+// @}
+
+} // namespace menumgee
+
+#endif // #ifndef FIELD_2D_H

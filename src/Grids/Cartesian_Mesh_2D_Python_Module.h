@@ -43,19 +43,31 @@ void cartesian_mesh_2d_module(py::module& m) {
   py::class_<Cartesian_Mesh_2D_T> grid(m, "cartesian_mesh_2d", R"delim(
     )delim");
 
-  // grid.def(py::init<const Scalar_T&,
-  //                   const Scalar_T&,
-  //                   const Scalar_T&,
-  //                   const Scalar_T&,
-  //                   const Scalar_T&,
-  //                   const Scalar_T&>(), R"delim(
-  //   )delim",
-  //   py::arg("x_min"),
-  //   py::arg("x_max"),
-  //   py::arg("num_cells_x"),
-  //   py::arg("y_min"),
-  //   py::arg("y_max"),
-  //   py::arg("num_cells_y"));
+  grid.def(py::init<const Scalar_T&,
+                    const Scalar_T&,
+                    const size_t&,
+                    const Scalar_T&,
+                    const Scalar_T&,
+                    const size_t&,
+                    const size_t&,
+                    const size_t&>(), R"delim(
+    )delim",
+    py::arg("x_min"),
+    py::arg("x_max"),
+    py::arg("num_cells_x"),
+    py::arg("y_min"),
+    py::arg("y_max"),
+    py::arg("num_cells_y"),
+    py::arg("num_quadrature_points_per_face"),
+    py::arg("num_quadrature_points_per_volume"));
+
+  grid.def("num_cells", &Cartesian_Mesh_2D_T::num_cells, R"delim(
+  )delim");
+
+  grid.def("cell_centroid", &Cartesian_Mesh_2D_T::cell_centroid, R"delim(
+  )delim",
+  py::arg("i"),
+  py::arg("j"));
 }
 
 #endif // #ifndef CARTESIAN_MESH_2D_PYTHON_MODULE_H
