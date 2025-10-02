@@ -1,6 +1,7 @@
 # ######################################################################
 # ######################################################################
-# #                  CMakeLists.txt for MeNumGee
+# # CMakeLists.txt for MeNumGee
+# # subdirectory: Grids
 # ######################################################################
 # ######################################################################
 # # This file is part of the MeNumGee software for numerical development
@@ -15,50 +16,18 @@
 # ######################################################################
 # ######################################################################
 
-cmake_minimum_required(VERSION 3.18)
-
-project(MeNumGee LANGUAGES CXX CUDA)
-
 # ######################################################################
-# # Language standards
+# # Tests
 # ######################################################################
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-set(CMAKE_CUDA_STANDARD 20)
-set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
 # ######################################################################
-# # CUDA setup
+# # Setting the name of the PyBind module
 # ######################################################################
-set(CMAKE_CUDA_ARCHITECTURES 86)
-
-find_package(CUDAToolkit REQUIRED)
-
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+option(MENUMGEE_Grids "Compile the MeNumGee utilities module" ON)
 
 # ######################################################################
-# # Include dependencies for each module
+# # Python Module
 # ######################################################################
-add_library(menumgee_project_dependencies INTERFACE)
-
-# ######################################################################
-# # Build types
-# ######################################################################
-include(CMake/BuildType.cmake)
-
-# ######################################################################
-# # Google test
-# ######################################################################
-include(CMake/GTest.cmake)
-
-# ######################################################################
-# # PyBind
-# ######################################################################
-include(CMake/PyBind11.cmake)
-
-# ######################################################################
-# # Subdirectories
-# ######################################################################
-add_subdirectory(Grids)
+if (MENUMGEE_Grids)
+  MeNumGee_add_pybind11_module(grids Grids_Python_Module.cpp)
+endif()
