@@ -97,6 +97,26 @@ public:
     return num_cells_x*num_cells_y;
   }
 
+  //////////////////////////////////////////////////////////////////////////
+  /// \brief Returns the 1D flattened index from the 2D index (i, j).
+  size_t get_idx(const size_t i, const size_t j) {
+    if(i < 0 || i >= num_cells_x || j < 0 || j >= num_cells_y) {
+      throw std::runtime_error("The cell index is out of range!");
+    }
+    return j * num_cells_x + i;
+  }
+
+  //////////////////////////////////////////////////////////////////////////
+  /// \brief Returns the 2D index (i, j) from a 1D flattened index.
+  std::pair<size_t, size_t> get_i_and_j(const size_t idx) {
+    if(idx >= num_cells_x * num_cells_y) {
+      throw std::runtime_error("The cell index is out of range!");
+    }
+    size_t j = idx / num_cells_x;
+    size_t i = idx % num_cells_x;
+    return {i, j};
+  }
+
   /////////////////////////////////////////////////////////////////////////
   /// \brief Returns the cell centroid in the grid based on the input
   ///        of a two dimensional index.
